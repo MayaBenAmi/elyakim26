@@ -1,30 +1,31 @@
 <template>
   <div id="logistics">
+     <div class="title">{{ title }}</div>
     <div class="blocks-container">
         <div v-for="(subtitle, index) in subtitles" :key="index" class="block-container">
-            <div class="title-container">  
+            <div class="title-container" @click="showText(index)">  
                 <img 
                 src="../assets/media/plus.svg" 
                 alt="plus" 
                 v-if="!pressedIndex.includes(index)" 
-                @click="showText(index)"
                 class="plus"
                 >
                 <img 
                 src="../assets/media/minus.svg" 
                 alt="minus" 
                 v-if="pressedIndex.includes(index)" 
-                @click="showText(index)"
                 class="plus"
                 >
                 <div class="subtitle">{{ subtitle }}</div>
             </div>
         <!-- Text shown when expanded -->
-        <div v-if="pressedIndex.includes(index)" class="extra-text-container">
-            <div v-for="(text, tIndex) in jsonText.logistics[index].txt" :key="tIndex" >
-            • {{ text }}
-            </div>
-        </div>
+        <transition name="expand">
+          <div v-if="pressedIndex.includes(index)" class="extra-text-container">
+              <div v-for="(text, tIndex) in jsonText.logistics[index].txt" :key="tIndex" >
+              • {{ text }}
+              </div>
+          </div>
+        </transition>
         </div>
     </div>
   </div>
@@ -34,6 +35,7 @@
 import jsonText from "../../text.json";
 
 export default {
+    props: ["title"],
   name: "logistics",
   data() {
     return {
@@ -55,12 +57,39 @@ export default {
 </script>
 
 <style scoped>
+/* ===== TRANSITIONS ===== */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+}
+
+.expand-enter,
+.expand-leave-to {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.expand-enter-to,
+.expand-leave {
+  opacity: 1;
+  max-height: 500px;
+}
+
 #logistics {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     right: 0;
+}
+.title {
+    font-family: "assistant-extraBold";
+margin: auto;
+width: 80vw;
+margin-top: 5vh;
+font-size: 2.5vw;
+text-shadow: 1px 0px 3px #000000;
 }
 .blocks-container {
     display: flex;
@@ -102,7 +131,12 @@ export default {
     background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
     border: 0.2vh solid #75C2E6;
     border-radius: 2vh;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
 
+.title-container:hover {
+    background: linear-gradient(180deg, #e8e8e82f, #e8e8e86f);
 }
 .subtitle {
     font-size: 1.5vw;
@@ -122,7 +156,11 @@ export default {
 #logistics {
     position: relative;
 }
-    .blocks-container {
+.title {
+  margin-top: 7vh;
+  font-size: 6vw;
+}
+.blocks-container {
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
@@ -143,6 +181,7 @@ export default {
     background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
     border: 0.2vh solid #75C2E6;
     border-radius: 1.5vh;
+    cursor: pointer;
 }
 .subtitle {
     font-size: 5.5vw;

@@ -1,13 +1,13 @@
 <template>
     <div id="text-page">
-      <img src="@/assets/media/back.svg" alt="back" id="back" @click="back">
-      <div class="title">{{ title }}</div>
-      <fire-areas v-if="Number(tabNum) === 0"></fire-areas>
-      <refreshing v-if="Number(tabNum) === 1"></refreshing>
-      <shooting-range v-if="Number(tabNum) === 2"></shooting-range>
-      <logistics v-if="Number(tabNum) === 3"></logistics>
-      <structure  v-if="Number(tabNum) === 4"></structure>
-      <darcash v-if="Number(tabNum) === 5"></darcash>
+      <img src="@/assets/media/back.svg" alt="back" id="back" @click="back" v-if="displayArrow">
+      <!-- <div class="title">{{ title }}</div> -->
+      <fire-areas :title="title" v-if="Number(tabNum) === 0"></fire-areas>
+      <refreshing :maintitle="title" v-if="Number(tabNum) === 1"></refreshing>
+      <shooting-range :title="title" v-if="Number(tabNum) === 2"></shooting-range>
+      <logistics :title="title" v-if="Number(tabNum) === 3"></logistics>
+      <structure :title="title" v-if="Number(tabNum) === 4" @hide-arrow="hideArrow" @show-arrow="showArrow"></structure>
+      <darcash :title="title" v-if="Number(tabNum) === 5"></darcash>
 
 
       <!-- <div id="text-border">
@@ -38,12 +38,19 @@ export default {
   },
   data() {
     return {
-      title: json["topics"][Number(this.tabNum)]
+      title: json["topics"][Number(this.tabNum)],
+      displayArrow: true
     }
   },
   methods: {
     back() {
       this.$emit("back");
+    },
+    hideArrow() {
+      this.displayArrow = false;
+    },
+    showArrow() {
+      this.displayArrow = true;
     }
   }
 }

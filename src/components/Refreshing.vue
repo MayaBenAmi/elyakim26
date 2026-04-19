@@ -1,7 +1,9 @@
 <template>
   <div id="refreshing">
     <div class="web-container">
+      
       <div v-if="chosenTitle === ''">
+      <div class="maintitle">{{ maintitle }}</div>
       <img class="wave" id="wave0" src="@/assets/media/wave0.svg" alt="">
       <img class="wave" id="wave1" src="@/assets/media/wave1.svg" alt="">
 
@@ -21,7 +23,7 @@
     </div>
 
 
-    <refreshment v-if="chosenTitle !== ''" :num="chosenTitle" @back="back"></refreshment>
+    <refreshment v-if="chosenTitle !== ''" :num="chosenTitle" :maintitle="maintitle" @back="back"></refreshment>
   </div>
 </template>
 
@@ -30,6 +32,7 @@ import json from "../../text.json";
 import Refreshment from "@/components/Refreshment";
 
 export default {
+  props: ["maintitle"],
   name: "refreshing",
   components: { Refreshment },
 
@@ -115,6 +118,16 @@ export default {
   overflow-y: hidden;
   overflow-x: hidden;
 }
+.maintitle {
+    font-family: "assistant-extraBold";
+    margin: auto;
+    width: 80vw;
+    margin-top: 5vh;
+    font-size: 2.5vw;
+    text-shadow: 1px 0px 3px #000000;
+}
+
+
 
 /* ===== LAYOUT ===== */
 .titles-container {
@@ -225,6 +238,10 @@ export default {
 
   #wave1 {
     top: 10vh;
+  }
+  .maintitle {
+    margin-top: 7vh;
+    font-size: 6vw;
   }
 
   .titles-container {

@@ -1,5 +1,6 @@
 <template>
   <div id="structure">
+     <div class="title">{{ title }}</div>
     <div class="web-container" v-if="!chosen">
       <div class="titles-container">
         <div 
@@ -13,11 +14,13 @@
       </div>
     </div>
 
-    <practice 
-      v-if="chosen" 
-      @back="back" 
-      :tab="selectedTab">
-    </practice>
+    <transition name="slide-up">
+      <practice 
+        v-if="chosen" 
+        @back="back" 
+        :tab="selectedTab">
+      </practice>
+    </transition>
   </div>
 </template>
 
@@ -26,6 +29,7 @@ import json from "../../text.json";
 import Practice from "@/components/Practice.vue";
 
 export default {
+  props: ["title"],
   name: "structure",
   components: {
     Practice
@@ -42,10 +46,12 @@ export default {
     back() {
       this.chosen = false;
       this.selectedTab = null;
+      this.$emit("show-arrow");
     },
     selectTab(tab, event) {
       const el = event.currentTarget;
       el.classList.add('clicked');
+      this.$emit("hide-arrow");
 
       setTimeout(() => {
         this.selectedTab = tab;
@@ -58,6 +64,18 @@ export default {
 </script>
 
 <style scoped>
+/* ===== TRANSITIONS ===== */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.slide-up-enter,
+.slide-up-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
 #structure {
   position: absolute;
   width: 100%;
@@ -75,7 +93,14 @@ export default {
   top: 0;
   right: 0;
 }
-
+.title {
+    font-family: "assistant-extraBold";
+margin: auto;
+width: 80vw;
+margin-top: 5vh;
+font-size: 2.5vw;
+text-shadow: 1px 0px 3px #000000;
+}
 /* ===== LAYOUT ===== */
 .titles-container {
   position: absolute;
@@ -93,20 +118,21 @@ export default {
 
 /* ===== TAB (copied from .title) ===== */
 .tab {
-  padding: 0.75vw;
-  border: 0.2vh solid #75C2E6;
-  border-radius: 1.25vw;
-  color: #E8E8E8;
+  padding: 1vh 1.5vw;
+  border: 0.15vh solid rgba(117,194,230,0.6);
+  border-radius: 1vh;
+  color: rgba(232,232,232,0.95);
   width: 12vw;
   cursor: pointer;
-  background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
+  background: linear-gradient(135deg, rgba(117,194,230,0.15) 0%, rgba(70,120,200,0.1) 100%);
   position: relative;
   font-size: 2.25vw;
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: transform 120ms ease, background-color 150ms ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  transition: transform 120ms ease, background-color 150ms ease, box-shadow 150ms ease;
   overflow: hidden;
   font-family: "assistant";
   text-align: center;
+  backdrop-filter: blur(5px);
 
   /* mobile fixes */
   touch-action: manipulation;
@@ -115,7 +141,7 @@ export default {
 
 /* press effect */
 .tab:active {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 
 /* background fill animation */
@@ -126,8 +152,8 @@ export default {
   right: 0;
   height: 100%;
   width: 0;
-  border-radius: 1vw;
-  background-color: #75C2E6;
+  border-radius: 0.8vh;
+  background: linear-gradient(135deg, rgba(117,194,230,0.4) 0%, rgba(100,150,255,0.3) 100%);
   z-index: -1;
   transition: all 150ms;
 }
@@ -138,8 +164,9 @@ export default {
 
 /* hover */
 .tab:hover {
-  color: #1F1E23;
-  border-color: transparent;
+  color: #FFFFFF;
+  border-color: rgba(117,194,230,0.9);
+  box-shadow: 0 6px 20px rgba(117,194,230,0.3);
 }
 
 .tab:hover::before {
@@ -152,12 +179,21 @@ export default {
     flex-direction: column;
     gap: 2vh;
   }
+  .title {
+  margin-top: 7vh;
+  font-size: 6vw;
+}
 
   .tab {
-    font-size: 5vw;
-    border-radius: 1vh;
-    padding: 1vh;
-    width: 50vw;
+    font-size: 4vw;
+    border-radius: 0.8vh;
+    padding: 1.2vh 2vw;
+    width: 60vw;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+
+  .tab:hover {
+    box-shadow: 0 4px 15px rgba(117,194,230,0.25);
   }
 }
 </style>

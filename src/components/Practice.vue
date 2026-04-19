@@ -2,12 +2,17 @@
   <div class="practice">
     <img src="@/assets/media/back.svg" alt="back" id="back" @click="back" />
     <div class="subtitle">{{tab}}</div>
-    <div v-if="isAlal" id="extra-container">
-      <div class="bullet" v-for="(item, j) in alalExtra" :key="j">
-        {{item}}
+    <button v-if="isAlal" id="extra-toggle" @click="showExtra = !showExtra">
+      {{ showExtra ? '▼ הסתר הערות' : '▲ הצג הערות' }}
+    </button>
+    <transition name="slide">
+      <div v-if="isAlal && showExtra" id="extra-container">
+        <div class="bullet" v-for="(item, j) in alalExtra" :key="j">
+          {{item}}
+        </div>
       </div>
-    </div>
-    <div id="table-container">
+    </transition>
+    <div id="table-container" :class="{ 'table-slide': showExtra }">
     <table>
         <thead>
         <tr>
@@ -40,7 +45,11 @@ import json from "../../text.json";
 export default {
   name: "practice",
   props: ["tab"],
-
+  data() {
+    return {
+      showExtra: false
+    };
+  },
 computed: {
   englishTab() {
     return String(this.tab) === 'אל"ת' ? "alat" : "alal";
@@ -90,7 +99,7 @@ computed: {
     font-family: "assistant-extraBold";
     margin: auto;
     width: 80vw;
-    margin-top: 14vh;
+    margin-top: 0vh;
     font-size: 1.75vw;
     text-shadow: 1px 0px 1.5px #000000;
 }
@@ -102,11 +111,82 @@ computed: {
     cursor: pointer;
     z-index: 7;
 }
+#extra-toggle {
+  display: block;
+  margin: 1.5vh auto 0.5vh;
+  padding: 0.6vh 1.5vw;
+  background: linear-gradient(135deg, rgba(100,200,255,0.2) 0%, rgba(100,150,255,0.1) 100%);
+  border: 0.15vh solid rgba(100,200,255,0.4);
+  border-radius: 1vh;
+  color: rgba(255,255,255,0.9);
+  font-family: "assistant-extraBold";
+  font-size: 0.85vw;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#extra-toggle:hover {
+  background: linear-gradient(135deg, rgba(100,200,255,0.3) 0%, rgba(100,150,255,0.2) 100%);
+  border-color: rgba(100,200,255,0.6);
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out, max-height 0.35s ease-out, padding 0.35s ease-out, margin 0.35s ease-out;
+}
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+}
+.slide-enter-to,
+.slide-leave {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 900px;
+  padding-top: 2.5vh;
+  padding-bottom: 2.5vh;
+  margin-top: 2vh;
+}
 #extra-container {
   text-align: right;
-  margin: auto;
-  width: fit-content;
-  padding: 2%;
+  margin: 2vh auto;
+  width: 60%;
+  padding: 2.5vh 3vw;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border: 0.2vh solid rgba(255,255,255,0.3);
+  border-radius: 1.5vh;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  box-sizing: border-box;
+  overflow: hidden;
+  max-height: 900px;
+}
+
+#table-container {
+  transition: transform 0.35s ease-out;
+}
+
+.table-slide {
+  transform: translateY(20px);
+}
+
+.bullet {
+  margin: 0.8vh 0;
+  padding-right: 1.5vw;
+  font-family: "assistant";
+  font-size: 1.1vw;
+  color: rgba(255,255,255,0.95);
+  position: relative;
+  padding-left: 1.5vw;
+}
+.bullet::before {
+  content: "●";
+  position: absolute;
+  right: 0;
+  color: rgba(255,255,255,0.7);
 }
 #table-container {
     margin-top: 2vh;
@@ -118,19 +198,41 @@ computed: {
 }
 table {
     border-collapse: collapse;
-    width: 60%; /* table only takes as much space as needed */
+    width: 60%;
     table-layout: fixed;
     margin-bottom: 5vh;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
+    border: 0.15vh solid rgba(255,255,255,0.2);
+    border-radius: 1vh;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 th {
-    border: 0.25vh solid white;
+    background: linear-gradient(135deg, rgba(100,150,255,0.25) 0%, rgba(70,120,200,0.2) 100%);
+    border: 0.15vh solid rgba(150,180,255,0.4);
+    padding: 1.5vh 1%;
+    font-weight: bold;
+    color: rgba(255,255,255,0.95);
+    font-family: "assistant-extraBold";
+    font-size: 1vw;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.03);
+}
+tr:hover {
+    background-color: rgba(100,150,255,0.1);
+    transition: background-color 0.2s ease;
 }
 td {
     direction: rtl;
     text-align: right;
-    border: 0.25vh solid white;
-    padding: 1%;
+    border: 0.15vh solid rgba(255,255,255,0.15);
+    padding: 1.2vh 1%;
     white-space: pre-line;
+    color: rgba(255,255,255,0.9);
+    transition: all 0.2s ease;
+    font-size: 1.1vw;
 }
 @media (max-device-width: 600px) {
   #back {
@@ -140,25 +242,41 @@ td {
   }
   .subtitle {
     font-size: 5vw;
-    margin-top: 10.5vh;
+    margin-top: 0vh;
+  }
+  #extra-toggle {
+    font-size: 3vw;
+    padding: 0.4vh 2vw;
+    margin: 1.5vh auto 0.5vh;
+  }
+  #extra-container {
+    width: 70vw !important;
+    padding: 2vh 3vw !important;
+    margin: 1vh auto !important;
+    border-radius: 0.5vh !important;
+  }
+  .bullet {
+    font-size: 2.2vw !important;
+    margin: 0.5vh 0 !important;
   }
 #table-container {
   margin-top: 0.75vh;
 }
 
     table {
-        width: 90%;
+        width: 70vw;
+        border-radius: 0.5vh;
+        box-sizing: border-box;
     }
     th {
-        border: 0.25vw solid white;
-        font-size: 1.25vh;
+        border: 0.15vh solid rgba(150,180,255,0.4);
+        font-size: 2.5vw;
+        padding: 1vh 0.5%;
     }
     td {
-        border: 0.25vw solid white;
-        font-size: 1.25vh;
+        border: 0.15vh solid rgba(255,255,255,0.15);
+        font-size: 2.2vw;
+        padding: 0.8vh 0.5%;
     }
-    /* #table-container {
-        margin-top: 10vh;
-    } */
 }
 </style>

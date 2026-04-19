@@ -3,7 +3,7 @@
     <div class="web-container">
       <img class="wave" id="wave0" src="@/assets/media/wave0.svg" alt="">
       <img class="wave" id="wave1" src="@/assets/media/wave1.svg" alt="">
-
+      <div class="title">{{ title }}</div>
       <div class="number-container" v-if="!chosen && !table">
         <div
           v-for="(name, index) in fireAreaNames"
@@ -32,6 +32,7 @@ import FireArea from "@/components/FireArea";
 import FireTable from "@/components/FireTable.vue";
 
 export default {
+  props: ["title"],
   name: "fire-areas",
   components: {
     FireArea,
@@ -75,6 +76,14 @@ export default {
   height: 100%;
   top: 0;
   right: 0;
+}
+.title {
+    font-family: "assistant-extraBold";
+    margin: auto;
+    width: 80vw;
+    margin-top: 5vh;
+    font-size: 2.5vw;
+    text-shadow: 1px 0px 3px #000000;
 }
 
 .web-container {
@@ -219,6 +228,10 @@ export default {
 
 /* ===== MOBILE ===== */
 @media (max-device-width: 600px) {
+  .title {
+    margin-top: 7vh;
+    font-size: 6vw;
+  }
   .number-container {
     flex-direction: column;
     justify-content: space-around;
