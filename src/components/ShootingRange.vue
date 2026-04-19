@@ -43,7 +43,8 @@ export default {
     width: 80vw;
     margin-top: 5vh;
     font-size: 2.5vw;
-    text-shadow: 1px 0px 3px #000000;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 #text-border {
   width: max-content;

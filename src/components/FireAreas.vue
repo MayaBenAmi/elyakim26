@@ -83,7 +83,8 @@ export default {
     width: 80vw;
     margin-top: 5vh;
     font-size: 2.5vw;
-    text-shadow: 1px 0px 3px #000000;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .web-container {
@@ -111,17 +112,18 @@ export default {
 
 .number {
   padding: 3vw;
-  border: 0.2vh solid #75C2E6;
+  border: 0.15vh solid rgba(96,165,250,0.5);
   border-radius: 50%;
-  color: #E8E8E8;
+  color: #E6EDF3;
   z-index: 3;
   cursor: pointer;
   margin: 2%;
-  background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
+  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
+  backdrop-filter: blur(10px);
   position: relative;
   font-size: 3vw;
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: transform 120ms ease, background-color 150ms ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 0 rgba(96,165,250,0);
+  transition: transform 120ms ease, box-shadow 200ms ease;
   overflow: hidden;
   font-family: "assistant";
   margin-bottom: 10vh;
@@ -145,7 +147,7 @@ export default {
   height: 100%;
   width: 0;
   border-radius: 2vw;
-  background-color: #75C2E6;
+  background: linear-gradient(135deg, #60A5FA, #3B82F6);
   z-index: -1;
   transition: all 150ms;
 }
@@ -176,8 +178,9 @@ export default {
 
 /* hover (desktop only effect) */
 .number:hover {
-  color: #1F1E23;
+  color: #0a0f1e;
   border-color: transparent;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 20px rgba(96,165,250,0.3);
 }
 
 .number:hover::before {

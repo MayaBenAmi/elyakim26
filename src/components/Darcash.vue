@@ -53,7 +53,8 @@ export default {
     width: 80vw;
     margin-top: 5vh;
     font-size: 2.5vw;
-    text-shadow: 1px 0px 3px #000000;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 #table-container {
@@ -77,8 +78,8 @@ table {
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 th {
-    background: linear-gradient(135deg, rgba(100,150,255,0.25) 0%, rgba(70,120,200,0.2) 100%);
-    border: 0.15vh solid rgba(150,180,255,0.4);
+    background: linear-gradient(135deg, rgba(96,165,250,0.3) 0%, rgba(59,130,246,0.2) 100%);
+    border: 0.15vh solid rgba(96,165,250,0.4);
     padding: 1.5vh 1%;
     font-weight: bold;
     color: rgba(255,255,255,0.95);
@@ -90,7 +91,7 @@ tr:nth-child(even) {
     background-color: rgba(255,255,255,0.03);
 }
 tr:hover {
-    background-color: rgba(100,150,255,0.1);
+    background-color: rgba(96,165,250,0.1);
     transition: background-color 0.2s ease;
 }
 td {

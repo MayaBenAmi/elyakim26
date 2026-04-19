@@ -115,18 +115,20 @@ computed: {
   display: block;
   margin: 1.5vh auto 0.5vh;
   padding: 0.6vh 1.5vw;
-  background: linear-gradient(135deg, rgba(100,200,255,0.2) 0%, rgba(100,150,255,0.1) 100%);
-  border: 0.15vh solid rgba(100,200,255,0.4);
-  border-radius: 1vh;
-  color: rgba(255,255,255,0.9);
+  background: linear-gradient(135deg, rgba(96,165,250,0.15) 0%, rgba(59,130,246,0.08) 100%);
+  border: 0.15vh solid rgba(96,165,250,0.4);
+  border-radius: 1.5vh;
+  color: rgba(230,237,243,0.95);
   font-family: "assistant-extraBold";
   font-size: 0.85vw;
   cursor: pointer;
-  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
 }
 #extra-toggle:hover {
-  background: linear-gradient(135deg, rgba(100,200,255,0.3) 0%, rgba(100,150,255,0.2) 100%);
-  border-color: rgba(100,200,255,0.6);
+  background: linear-gradient(135deg, rgba(96,165,250,0.25) 0%, rgba(59,130,246,0.15) 100%);
+  border-color: rgba(96,165,250,0.65);
+  box-shadow: 0 0 14px rgba(96,165,250,0.25);
 }
 .slide-enter-active,
 .slide-leave-active {
@@ -208,8 +210,8 @@ table {
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 th {
-    background: linear-gradient(135deg, rgba(100,150,255,0.25) 0%, rgba(70,120,200,0.2) 100%);
-    border: 0.15vh solid rgba(150,180,255,0.4);
+    background: linear-gradient(135deg, rgba(96,165,250,0.3) 0%, rgba(59,130,246,0.2) 100%);
+    border: 0.15vh solid rgba(96,165,250,0.4);
     padding: 1.5vh 1%;
     font-weight: bold;
     color: rgba(255,255,255,0.95);
@@ -221,7 +223,7 @@ tr:nth-child(even) {
     background-color: rgba(255,255,255,0.03);
 }
 tr:hover {
-    background-color: rgba(100,150,255,0.1);
+    background-color: rgba(96,165,250,0.1);
     transition: background-color 0.2s ease;
 }
 td {

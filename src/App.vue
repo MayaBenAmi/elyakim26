@@ -62,8 +62,8 @@ export default {
   font-family: "assistant"; 
   text-align: center; 
   direction: rtl; 
-  color: #E8E8E8; 
-  background: linear-gradient(135deg, #5E81AC, #475C7A, #364256, #2B2A30, #1F1E23, #1F1E23);
+  color: #E6EDF3;
+  background: linear-gradient(160deg, #0a0f1e 0%, #0d1529 40%, #101e35 70%, #0a1628 100%);
 }
 
 #logo { 

@@ -53,7 +53,8 @@ export default {
         width: 80vw;
         margin-top: 15vh;
         font-size: 3vw;
-        text-shadow: 1px 0px 1.5px #000000;
+        letter-spacing: 0.04em;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
     .txt {
         margin: auto;
@@ -61,8 +62,11 @@ export default {
         width: 50vw;
         font-size: 2vw;
         border-radius: 2vw;
-        border: 0.5vh solid white;
+        border: 0.15vh solid rgba(96,165,250,0.3);
         border-top: none;
+        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         padding: 2vw;
         padding-bottom: 5vh;
         padding-top: 10vh;

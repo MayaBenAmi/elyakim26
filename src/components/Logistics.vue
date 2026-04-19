@@ -89,7 +89,8 @@ margin: auto;
 width: 80vw;
 margin-top: 5vh;
 font-size: 2.5vw;
-text-shadow: 1px 0px 3px #000000;
+letter-spacing: 0.04em;
+text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .blocks-container {
     display: flex;
@@ -128,29 +129,34 @@ text-shadow: 1px 0px 3px #000000;
     width: 90%;
     height: 10vh;
     margin: 0.5vh;
-    background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
-    border: 0.2vh solid #75C2E6;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
+    backdrop-filter: blur(10px);
+    border: 0.15vh solid rgba(96,165,250,0.4);
     border-radius: 2vh;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .title-container:hover {
-    background: linear-gradient(180deg, #e8e8e82f, #e8e8e86f);
+    background: linear-gradient(135deg, rgba(96,165,250,0.12) 0%, rgba(59,130,246,0.08) 100%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 16px rgba(96,165,250,0.2);
 }
 .subtitle {
     font-size: 1.5vw;
     font-family: "assistant-extraBold";
 }
 .extra-text-container {
-    background: linear-gradient(180deg, #e8e8e81f, #e8e8e85f);
-    border: 0.2vh solid #75C2E6;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    backdrop-filter: blur(8px);
+    border: 0.15vh solid rgba(96,165,250,0.3);
     border-radius: 1.75vh;
     width: 90%;
     padding: 1%;
     margin-right: 0.5vh;
     margin-top: 0.5%;
     font-size: 1.35vw;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 @media (max-device-width: 600px) {
 #logistics {
