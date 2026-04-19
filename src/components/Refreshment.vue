@@ -37,15 +37,17 @@
 
 <style scoped>
 #refreshment {
-    position: absolute;
+    position: relative;
+    /* background-color: blueviolet; */
     width: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     height: 100%;
     top: 0;
     right: 0;
 }
 #back {
-    position: absolute; 
+    position: fixed; 
     right: 1vw; 
     top: 2vh; 
     height: 10vh; 
@@ -63,9 +65,11 @@
 .txt {
     margin: auto;
     width: fit-content;
+    max-width: 90vw;
     font-size: 1.5vw;
     border-radius: 2vw;
     margin-top: -2vh;
+    margin-bottom: 3vh;
     border: 0.5vh solid white;
     text-align: start;
     border-top: none;
@@ -95,6 +99,6 @@
   }
     .txt-line {
         margin-bottom: 1vh; 
-}
+    }
 }
 </style>
