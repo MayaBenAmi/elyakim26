@@ -1,23 +1,26 @@
 <template>
   <div class="app">
     <img :src="require('@/assets/media/logo.png')" id="logo" alt="logo"></img>
-    <open-page v-if="page===0" @chosenNum="nextPage"></open-page>
+    <open-page v-if="page===-1" @homePage="homePage"></open-page>
+    <home-page v-if="page===0" @chosenNum="nextPage"></home-page>
     <text-page v-if="page===1" @back="back" :tabNum="chosenTab"></text-page>
   </div>
 </template>
 
 <script>
 import OpenPage from "@/components/OpenPage";
+import HomePage from "@/components/HomePage";
 import TextPage from "@/components/TextPage";
 export default {
   name: "App",
   components: {
-    OpenPage,
-    TextPage
+    HomePage,
+    TextPage,
+    OpenPage
   },
   data() {
     return {
-      page: 0,
+      page: -1,
       chosenTab: -1
     }
   },
@@ -27,6 +30,9 @@ export default {
       this.page++ ;
     },
     back() {
+      this.page = 0;
+    },
+    homePage() {
       this.page = 0;
     }
   }

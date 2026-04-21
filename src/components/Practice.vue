@@ -152,6 +152,12 @@ computed: {
   padding-bottom: 2.5vh;
   margin-top: 2vh;
 }
+#table-container {
+  transition: transform 0.35s ease-out;
+}
+.table-slide {
+  transform: translateY(20px);
+}
 #extra-container {
   text-align: right;
   margin: 2vh auto;
@@ -167,13 +173,6 @@ computed: {
   max-height: 900px;
 }
 
-#table-container {
-  transition: transform 0.35s ease-out;
-}
-
-.table-slide {
-  transform: translateY(20px);
-}
 
 .bullet {
   margin: 0.8vh 0;

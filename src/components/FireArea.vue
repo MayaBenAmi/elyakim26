@@ -58,7 +58,7 @@ export default {
     }
     .txt {
         margin: auto;
-        margin-top: -5vh;
+        margin-top: 2.5vh;
         width: 50vw;
         font-size: 2vw;
         border-radius: 2vw;
@@ -79,12 +79,12 @@ export default {
   }
   .txt {
     border-radius: 2.25vh;
-    border: 0.5vw solid white;
-    border-top: none;
+    /* border: 0.5vw solid white; */
+    /* border-top: none; */
     font-size: 5vw;
-    margin-top: -2.5vh;
+    margin-top: 1.25vh;
     width: 70vw;
-    padding-top: 7vh;
+    padding-top: 5vh;
   }
   .subTitle {
     font-size: 7vw;

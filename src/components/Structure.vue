@@ -14,13 +14,11 @@
       </div>
     </div>
 
-    <transition name="slide-up">
-      <practice 
-        v-if="chosen" 
-        @back="back" 
-        :tab="selectedTab">
-      </practice>
-    </transition>
+    <practice
+      v-if="chosen"
+      @back="back"
+      :tab="selectedTab">
+    </practice>
   </div>
 </template>
 
@@ -46,12 +44,10 @@ export default {
     back() {
       this.chosen = false;
       this.selectedTab = null;
-      this.$emit("show-arrow");
     },
     selectTab(tab, event) {
       const el = event.currentTarget;
       el.classList.add('clicked');
-      this.$emit("hide-arrow");
 
       setTimeout(() => {
         this.selectedTab = tab;
@@ -64,17 +60,6 @@ export default {
 </script>
 
 <style scoped>
-/* ===== TRANSITIONS ===== */
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: transform 0.4s ease, opacity 0.4s ease;
-}
-
-.slide-up-enter,
-.slide-up-leave-to {
-  transform: translateY(100%);
-  opacity: 0;
-}
 
 #structure {
   position: absolute;
