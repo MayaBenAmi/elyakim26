@@ -1,72 +1,49 @@
 <template>
   <div id="home-page">
-    <img class="wave" id="wave0" src="@/assets/media/wave0.svg" alt="">
-    <img class="wave" id="wave1" src="@/assets/media/wave1.svg" alt="">
-    <!-- DESKTOP -->
-    <div class="big-container">
-      <div class="row" v-for="rowIndex in 2" :key="rowIndex">
-        <div
-          v-for="i in 3"
-          :key="i"
-          class="tab"
-          v-if="tabs[(rowIndex - 1) * 3 + (i - 1)]"
-          @click="triggerTabShine($event, (rowIndex - 1) * 3 + (i - 1))"
+    <div class="content">
+      <img class="logo" src="@/assets/media/logo.png" alt="לוגו">
+      <div class="main-title">בחר נושא</div>
+      <div class="divider"></div>
+      <div class="grid">
+        <button
+          v-for="(topic, index) in topics"
+          :key="index"
+          class="topic-btn"
+          :class="{ 'shine-animate': shiningIndex === index }"
+          @click="triggerShine(index)"
         >
-          <img :src="tabs[(rowIndex - 1) * 3 + (i - 1)]" />
-        </div>
-      </div>
-    </div>
-    <!-- MOBILE -->
-    <div class="small-container">
-      <div class="row" v-for="rowIndex in Math.ceil(tabs.length / 2)" :key="rowIndex">
-        <div
-          v-for="i in 2"
-          :key="i"
-          class="tab"
-          v-if="tabs[(rowIndex - 1) * 2 + (i - 1)]"
-          @click="triggerTabShine($event, (rowIndex - 1) * 2 + (i - 1))"
-        >
-          <img :src="tabs[(rowIndex - 1) * 2 + (i - 1)]" />
-        </div>
+          <span class="topic-text">{{ topic }}</span>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import tab0 from '@/assets/media/tab0.svg';
-import tab1 from '@/assets/media/tab1.svg';
-import tab2 from '@/assets/media/tab2.svg';
-import tab3 from '@/assets/media/tab3.svg';
-import tab4 from '@/assets/media/tab4.svg';
-import tab5 from '@/assets/media/tab5.svg';
+import json from "../../text.json";
 
 export default {
   name: "home-page",
+  emits: ["chosenNum"],
   data() {
     return {
-      tabs: [
-        tab0, tab1, tab2,
-        tab3, tab4, tab5
-      ]
+      topics: json.topics,
+      shiningIndex: null
     };
   },
   methods: {
-    triggerTabShine(event, chosenNum) {
-      const el = event.currentTarget;
+    triggerShine(index) {
+      this.shiningIndex = null;
+      this.$nextTick(() => {
+        this.shiningIndex = index;
+      });
 
-      el.classList.remove("shine-animate");
-      void el.offsetWidth;
-      el.classList.add("shine-animate");
-
-      el.removeEventListener("animationend", el._shineListener);
-
-      el._shineListener = () => {
-        this.$emit("chosenNum", chosenNum);
-        el.removeEventListener("animationend", el._shineListener);
+      const onEnd = () => {
+        this.$emit("chosenNum", index);
+        this.shiningIndex = null;
       };
 
-      el.addEventListener("animationend", el._shineListener);
+      setTimeout(onEnd, 420);
     }
   }
 };
@@ -74,107 +51,129 @@ export default {
 
 <style scoped>
 #home-page {
-  position: relative;
+  position: absolute;
+  top: 0; right: 0;
   height: 100vh;
   width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f7;
   overflow: hidden;
 }
 
-/* WAVES (STATIC) */
-.wave {
-  width: 100vw;
-  position: absolute;
-  right: 0;
-  user-select: none;
-  z-index: 1;
-  transform: scale(1.03);
-}
-
-#wave0 { top: -5vh; }
-#wave1 { top: 30vh; }
-
-/* CONTAINERS */
-.big-container,
-.small-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  width: 100vw;
-}
-
-.big-container {
+.content {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 4vh;
+  padding: 0 4vw;
+  width: 100%;
 }
 
-.small-container {
-  display: none;
+.logo {
+  height: 8vh;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
 }
 
-.row {
+.main-title {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+.divider {
+  width: 3vw;
+  height: 1.5px;
+  background: #d2d2d7;
+  margin-top: -2.5vh;
+}
+
+.grid {
+  display: grid;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 1.2vw;
+  width: 80vw;
 }
 
-/* TAB + SHINE */
-.tab {
-  width: 20vw;
-  margin: 1%;
+.topic-btn {
+  flex: 0 0 calc(25% - 0.9vw);
   position: relative;
   overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #d0e4d8;
+  border-radius: 16px;
+  padding: 3.5vh 2vw;
   cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, border-bottom-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
 }
 
-.tab img {
-  width: 100%;
-  display: block;
+.topic-btn:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.09);
+  border-color: #3a6b4a;
+}
+
+.topic-text {
+  font-family: "assistant-bold";
+  font-size: 1.3vw;
+  color: #1d1d1f;
+  user-select: none;
+  position: relative;
+  z-index: 1;
 }
 
 /* SHINE EFFECT */
-.tab::after {
+.topic-btn::after {
   content: '';
   position: absolute;
-  top: 2%;
-  left: -75%;
-  width: 50%;
-  height: 90.5%;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
   background: linear-gradient(
     120deg,
     rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 20%,
-    rgba(255,255,255,0.45) 50%,
-    rgba(255,255,255,0) 80%,
+    rgba(255,255,255,0.55) 50%,
     rgba(255,255,255,0) 100%
   );
   opacity: 0;
   pointer-events: none;
 }
 
-.tab.shine-animate::after {
-  animation: tabShine 0.8s ease-in-out;
+.topic-btn.shine-animate::after {
+  animation: btnShine 0.4s ease-in-out forwards;
   opacity: 1;
 }
 
-@keyframes tabShine {
-  from { left: -75%; }
-  to   { left: 125%; }
+@keyframes btnShine {
+  from { left: -80%; }
+  to   { left: 120%; }
+}
+
+/* LARGE SCREEN */
+@media (min-width: 1600px) {
+  .main-title  { font-size: 3.8vw; }
+  .topic-text  { font-size: 1.8vw; }
 }
 
 /* MOBILE */
 @media (max-device-width: 600px) {
-  .wave {
-    width: 500vw;
-    right: -50vw;
+  .logo        { height: 4vh; }
+  .main-title  { font-size: 6.5vw; }
+  .divider     { width: 15vw; }
+  .grid {
+    flex-direction: column;
+    gap: 2.5vw;
+    width: 88vw;
   }
 
-  #wave0 { top: -50vh; }
-  #wave1 { top: 10vh; }
-
-  .big-container { display: none; }
-  .small-container { display: flex; flex-direction: column; }
-
-  .tab { width: 45vw; }
+  .topic-btn   { flex: none; width: 100%; padding: 2.5vh 4vw; border-radius: 20px; }
+  .topic-text  { font-size: 4.2vw; }
 }
 </style>

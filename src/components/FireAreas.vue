@@ -1,24 +1,25 @@
 <template>
   <div id="fire-areas">
-    <div class="web-container">
-      <img class="wave" id="wave0" src="@/assets/media/wave0.svg" alt="">
-      <img class="wave" id="wave1" src="@/assets/media/wave1.svg" alt="">
+    <div class="web-container" v-if="!chosen && !table">
+      <img class="logo" src="@/assets/media/logo.png" alt="לוגו">
       <div class="title">{{ title }}</div>
-      <div class="number-container" v-if="!chosen && !table">
-        <div
+      <div class="divider"></div>
+      <div class="number-container">
+        <button
           v-for="(name, index) in fireAreaNames"
           :key="index"
           class="number"
-          @click="pickArea(name, $event)"
+          :class="{ 'shine-animate': shiningIndex === index }"
+          @click="pickArea(name, index)"
         >
-          {{ name }}
-        </div>
+          <span class="number-text">{{ name }}</span>
+        </button>
       </div>
 
-      <div id="table" @click="showTable" v-if="!chosen && !table">
-        <div>שטחי אש לפי סוג האימון</div>
-        <img id="arrow" src="@/assets/media/arrow.svg" alt="arrow">
-      </div>
+      <button class="table-btn" @click="showTable">
+        <span class="btn-text">שטחי אש לפי סוג האימון</span>
+        <span class="arrow">←</span>
+      </button>
     </div>
 
     <fire-area :num="chosenNum" v-if="chosen" @back="back"></fire-area>
@@ -43,19 +44,19 @@ export default {
       fireAreaNames: json.fireAreas.map(area => area.num.toString()),
       chosen: false,
       chosenNum: "",
-      table: false
+      table: false,
+      shiningIndex: null
     }
   },
   methods: {
-    pickArea(name, event) {
-      const el = event.currentTarget;
-      el.classList.add('clicked');
-
+    pickArea(name, index) {
+      this.shiningIndex = null;
+      this.$nextTick(() => { this.shiningIndex = index; });
       setTimeout(() => {
         this.chosen = true;
         this.chosenNum = Number(name);
-        el.classList.remove('clicked');
-      }, 150); // match CSS transition
+        this.shiningIndex = null;
+      }, 420);
     },
     back() {
       this.chosen = false;
@@ -77,193 +78,165 @@ export default {
   top: 0;
   right: 0;
 }
-.title {
-    font-family: "assistant-extraBold";
-    margin: auto;
-    width: 80vw;
-    margin-top: 5vh;
-    font-size: 2.5vw;
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
 
 .web-container {
   width: 100vw;
   height: 100vh;
   position: absolute;
-  overflow: hidden;
-  margin: 0;
   top: 0;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f7;
+  gap: 3.5vh;
+  overflow: hidden;
+}
+
+.logo {
+  height: 7vh;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+}
+
+.title {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
+  margin-top: -2vh;
 }
 
 /* ===== NUMBERS ===== */
 .number-container {
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
+  gap: 1.2vw;
+  width: 80vw;
 }
 
 .number {
-  padding: 3vw;
-  border: 0.15vh solid rgba(96,165,250,0.5);
-  border-radius: 50%;
-  color: #E6EDF3;
-  z-index: 3;
-  cursor: pointer;
-  margin: 2%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-  backdrop-filter: blur(10px);
+  flex: 0 0 calc(25% - 0.9vw);
   position: relative;
-  font-size: 3vw;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 0 0 rgba(96,165,250,0);
-  transition: transform 120ms ease, box-shadow 200ms ease;
   overflow: hidden;
-  font-family: "assistant";
-  margin-bottom: 10vh;
-
-  /* mobile fixes */
+  background: #ffffff;
+  border: 1px solid #d0e4d8;
+  border-radius: 16px;
+  padding: 3.5vh 2vw;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* press effect */
-.number:active {
-  transform: scale(0.9);
+.number:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.09);
+  border-color: #3a6b4a;
 }
 
-/* background fill */
-.number::before {
-  content: "";
+.number-text {
+  font-family: "assistant-bold";
+  font-size: 1.3vw;
+  color: #1d1d1f;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* SHINE EFFECT */
+.number::after {
+  content: '';
   position: absolute;
   top: 0;
-  right: 0;
+  left: -80%;
+  width: 55%;
   height: 100%;
-  width: 0;
-  border-radius: 2vw;
-  background: linear-gradient(135deg, #60A5FA, #3B82F6);
-  z-index: -1;
-  transition: all 150ms;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
 }
 
-/* ripple effect */
-.number::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  background: rgba(255,255,255,0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  right: 50%;
-  transition: width 300ms, height 300ms;
+.number.shine-animate::after {
+  animation: btnShine 0.4s ease-in-out forwards;
+  opacity: 1;
 }
 
-/* triggered animation */
-.number.clicked::before {
-  width: 100%;
-}
-
-.number.clicked::after {
-  width: 200%;
-  height: 200%;
-}
-
-/* hover (desktop only effect) */
-.number:hover {
-  color: #0a0f1e;
-  border-color: transparent;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 20px rgba(96,165,250,0.3);
-}
-
-.number:hover::before {
-  width: 100%;
-}
-
-/* ===== WAVES ===== */
-.wave {
-  width: 100vw;
-  max-height: 100%;
-  position: absolute;
-  right: 0;
-  user-select: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-#wave0 {
-  top: -20vh;
-}
-
-#wave1 {
-  top: 30vh;
+@keyframes btnShine {
+  from { left: -80%; }
+  to   { left: 120%; }
 }
 
 /* ===== TABLE BUTTON ===== */
-#table {
-  position: absolute;
-  top: 90%;
-  right: 50%;
-  transform: translateX(50%);
-  display: flex;
+.table-btn {
+  font-family: "assistant-bold";
+  font-size: 1vw;
+  color: #3a6b4a;
+  background: transparent;
+  border: 1.5px solid #3a6b4a;
+  border-radius: 980px;
+  padding: 0.9vh 2.5vw;
   cursor: pointer;
-  font-size: 1.2vw;
+  display: flex;
   align-items: center;
+  gap: 0.5vw;
+  transition: background 0.2s, color 0.2s;
 }
 
-#arrow {
-  height: 5vh;
-  padding-right: 0.35vw;
-  animation: movement 1s alternate-reverse infinite;
+.table-btn:hover {
+  background: #3a6b4a;
+  color: #ffffff;
 }
 
-@keyframes movement {
-  from { padding-right: 0.35vw; }
-  to { padding-right: 0.85vw; }
+.arrow {
+  font-size: 1vw;
+  line-height: 1;
+  transition: transform 0.2s ease;
 }
 
-/* ===== MOBILE ===== */
+.table-btn:hover .arrow {
+  transform: translateX(-0.3vw);
+}
+
+/* LARGE SCREEN */
+@media (min-width: 1600px) {
+  .title        { font-size: 3.8vw; }
+  .number-text  { font-size: 1.8vw; }
+  .table-btn    { font-size: 1.5vw; }
+  .arrow        { font-size: 1.4vw; }
+}
+
+/* MOBILE */
 @media (max-device-width: 600px) {
-  .title {
-    margin-top: 7vh;
-    font-size: 6vw;
-  }
+  .logo         { height: 4vh; }
+  .title        { font-size: 6.5vw; }
+  .divider      { width: 15vw; }
+
   .number-container {
     flex-direction: column;
-    justify-content: space-around;
-    height: 65%;
+    gap: 2.5vw;
+    width: 88vw;
   }
 
-  .number {
-    font-size: 9vw;
-    padding: 5vw;
-    margin: 1vh;
-  }
+  .number       { flex: none; width: 100%; padding: 2.5vh 4vw; border-radius: 20px; }
+  .number-text  { font-size: 4.2vw; }
 
-  .wave {
-    width: 500vw;
-    right: 0;
-  }
-
-  #wave0 {
-    top: -50vh;
-    right: -40vw;
-  }
-
-  #wave1 {
-    top: 10vh;
-  }
-
-  #table {
-    font-size: 4.25vw;
-    top: 85%;
-  }
+  .table-btn    { font-size: 4.5vw; padding: 1.2vh 10vw; }
+  .arrow        { font-size: 4vw; }
 }
 </style>

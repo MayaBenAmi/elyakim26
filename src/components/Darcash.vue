@@ -1,6 +1,7 @@
 <template>
   <div id="darcash">
     <div class="title">{{ title }}</div>
+    <div class="divider"></div>
     <div id="table-container">
         <table>
         <thead>
@@ -42,95 +43,98 @@ export default {
 <style scoped>
 #darcash {
   position: relative;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  right: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 10vh;
 }
+
 .title {
-    font-family: "assistant-extraBold";
-    margin: auto;
-    width: 80vw;
-    margin-top: 5vh;
-    font-size: 2.5vw;
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin-bottom: 1vh;
+}
+
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
+  margin-bottom: 3vh;
 }
 
 #table-container {
-    margin-top: 3vh;
-    width: 100%;
-    display: flex;
-    justify-content: center; /* horizontally center */
-    align-items: center;     /* vertically center if container has height */
-
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 table {
-    border-collapse: collapse;
-    width: 60%;
-    table-layout: fixed;
-    margin-bottom: 5vh;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
-    border: 0.15vh solid rgba(255,255,255,0.2);
-    border-radius: 1vh;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border-collapse: collapse;
+  width: 60vw;
+  table-layout: fixed;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.12);
+  border: 1px solid #e5e5ea;
+  margin-bottom: 5vh;
 }
+
 th {
-    background: linear-gradient(135deg, rgba(96,165,250,0.3) 0%, rgba(59,130,246,0.2) 100%);
-    border: 0.15vh solid rgba(96,165,250,0.4);
-    padding: 1.5vh 1%;
-    font-weight: bold;
-    color: rgba(255,255,255,0.95);
-    font-family: "assistant-extraBold";
-    font-size: 1vw;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  background: #f5f5f7;
+  border-bottom: 1px solid #f5f5f7;
+  border-left: 2px solid #f5f5f7;
+  padding: 1.5vh 2%;
+  font-family: "assistant-extrabold";
+  font-size: 1vw;
+  color: #1d1d1f;
 }
-tr:nth-child(even) {
-    background-color: rgba(255,255,255,0.03);
+th:last-child {
+  border-left: none;
 }
-tr:hover {
-    background-color: rgba(96,165,250,0.1);
-    transition: background-color 0.2s ease;
+
+tr:nth-child(even) td {
+  background-color: #f5f5f7;
 }
+
+tr:hover td {
+  background-color: #f0f7f3;
+}
+
 td {
-    direction: rtl;
-    text-align: right;
-    border: 0.15vh solid rgba(255,255,255,0.15);
-    padding: 1.2vh 1%;
-    white-space: pre-line;
-    color: rgba(255,255,255,0.9);
-    transition: all 0.2s ease;
-    font-size: 1.1vw;
+  direction: rtl;
+  text-align: right;
+  border-bottom: 1px solid #f5f5f7;
+  border-left: 2px solid #f5f5f7;
+  padding: 1.2vh 2%;
+  white-space: pre-line;
+  color: #3a3a3c;
+  font-family: "assistant";
+  font-size: 1vw;
+  transition: background-color 0.2s ease;
 }
+td:last-child {
+  border-left: none;
+}
+
 .phone-cell {
-    text-align: left;
-    width: max-content;
-    white-space: nowrap;
+  text-align: left;
+  white-space: nowrap;
 }
+
 @media (max-device-width: 600px) {
-    .title {
-        margin-top: 7vh;
-        font-size: 6vw;
-    }
-    #table-container {
-        margin-top: 1.5vh;
-    }
-    table {
-        width: 70vw;
-        border-radius: 0.5vh;
-        box-sizing: border-box;
-    }
-    th {
-        border: 0.15vh solid rgba(150,180,255,0.4);
-        font-size: 2.5vw;
-        padding: 1vh 0.5%;
-    }
-    td {
-        border: 0.15vh solid rgba(255,255,255,0.15);
-        font-size: 2.2vw;
-        padding: 0.8vh 0.5%;
-    }
+  #darcash      { padding-top: 6vh; }
+  .title        { font-size: 5.5vw; }
+  .divider      { width: 12vw; }
+  table         { width: 88vw; border-radius: 12px; }
+  th            { font-size: 2.8vw; padding: 1.2vh 1.5%; }
+  td            { font-size: 2.5vw; padding: 1vh 1.5%; }
 }
 </style>

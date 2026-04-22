@@ -1,6 +1,6 @@
 <template>
   <div id="refreshment">
-    <img src="@/assets/media/back.svg" alt="back" id="back" @click="back" />
+    <button id="back" @click="back">→ חזרה</button>
     <div class="maintitle">{{ maintitle }}</div>
     <div class="subTitle">{{ title }}</div>
 
@@ -91,11 +91,22 @@ export default {
 
 #back {
   position: fixed;
-  right: 1vw;
-  top: 2vh;
-  height: 10vh;
-  cursor: pointer;
+  right: 1.5vw;
+  top: 2.5vh;
   z-index: 7;
+  font-family: "assistant-bold";
+  font-size: 1vw;
+  color: #3a6b4a;
+  background: transparent;
+  border: 1.5px solid #3a6b4a;
+  border-radius: 980px;
+  padding: 0.7vh 1.5vw;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#back:hover {
+  background: #3a6b4a;
+  color: #ffffff;
 }
 
 .subTitle {
@@ -190,9 +201,8 @@ td {
 
 @media (max-device-width: 600px) {
   #back {
-    height: 6vh;
-    right: 2vw;
-    top: 1vh;
+    font-size: 3vw;
+    padding: 0.6vh 3vw;
   }
   .maintitle {
   margin-top: 7vh;

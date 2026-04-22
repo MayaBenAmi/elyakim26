@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <img :src="require('@/assets/media/logo.png')" id="logo" alt="logo"></img>
+    <!-- <img :src="require('@/assets/media/logo.png')" id="logo" alt="logo"></img> -->
     <open-page v-if="page===-1" @homePage="homePage"></open-page>
     <home-page v-if="page===0" @chosenNum="nextPage"></home-page>
     <text-page v-if="page===1" @back="back" :tabNum="chosenTab"></text-page>

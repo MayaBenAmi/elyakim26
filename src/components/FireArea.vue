@@ -1,7 +1,8 @@
 <template>
     <div id="fire-area">
-        <img src="@/assets/media/back.svg" alt="back" id="back" @click="back">
+        <button id="back" @click="back">→ חזרה</button>
         <div class="subTitle">{{ num }}</div>
+        <div class="divider"></div>
         <div class="txt">{{ txt }}</div>
     </div>
 </template>
@@ -31,66 +32,85 @@ export default {
 </script>
 
 <style scoped>
-    #fire-areas {
-        position: absolute;
-        top: 0%;
-        right: 0%;
-        width: 100%;
-        height: 100%;
-        margin: 0%;
-    }
-    #back {
-        position: absolute; 
-        right: 1vw; 
-        top: 2vh; 
-        height: 10vh; 
-        cursor: pointer;
-        z-index: 7;
-    }
-    .subTitle {
-        font-family: "assistant-extraBold";
-        margin: auto;
-        width: 80vw;
-        margin-top: 15vh;
-        font-size: 3vw;
-        letter-spacing: 0.04em;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .txt {
-        margin: auto;
-        margin-top: 2.5vh;
-        width: 50vw;
-        font-size: 2vw;
-        border-radius: 2vw;
-        border: 0.15vh solid rgba(96,165,250,0.3);
-        border-top: none;
-        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        padding: 2vw;
-        padding-bottom: 5vh;
-        padding-top: 10vh;
-    }
-@media (max-device-width: 600px) {
-  #back {
-    height: 6vh;
-    right: 2vw;
-    top: 1vh;
-  }
-  .txt {
-    border-radius: 2.25vh;
-    /* border: 0.5vw solid white; */
-    /* border-top: none; */
-    font-size: 5vw;
-    margin-top: 1.25vh;
-    width: 70vw;
-    padding-top: 5vh;
-  }
-  .subTitle {
-    font-size: 7vw;
-    margin-top: 12vh;
-  }
-
+#fire-area {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10vh 0 4vh;
 }
 
+#back {
+  position: absolute;
+  right: 1.5vw;
+  top: 2.5vh;
+  z-index: 7;
+  font-family: "assistant-bold";
+  font-size: 1vw;
+  color: #3a6b4a;
+  background: transparent;
+  border: 1.5px solid #3a6b4a;
+  border-radius: 980px;
+  padding: 0.7vh 1.5vw;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#back:hover {
+  background: #3a6b4a;
+  color: #ffffff;
+}
+
+.subTitle {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin-bottom: 1vh;
+}
+
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
+  margin-bottom: 3vh;
+}
+
+.txt {
+  width: 55vw;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e5ea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.08);
+  padding: 3vh 2.5vw;
+  font-family: "assistant";
+  font-size: 1.65vw;
+  color: #3a3a3c;
+  line-height: 1.8;
+  white-space: pre-line;
+  direction: rtl;
+  text-align: right;
+}
+
+@media (max-device-width: 600px) {
+  #fire-area { padding-top: 6vh; }
+  #back {
+    font-size: 3vw;
+    padding: 0.6vh 3vw;
+    right: 2vw;
+    top: 1.5vh;
+  }
+  .subTitle { font-size: 5.5vw; }
+  .divider  { width: 12vw; }
+  .txt {
+    width: 88vw;
+    font-size: 3.2vw;
+    padding: 2.5vh 4vw;
+    border-radius: 20px;
+  }
+}
 </style>
