@@ -107,7 +107,7 @@ export default {
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #d0e4d8;
-  border-radius: 16px;
+  border-radius: 10px;
   padding: 3.5vh 2vw;
   cursor: pointer;
   transition: box-shadow 0.2s, border-color 0.2s, border-bottom-color 0.2s;

@@ -1,66 +1,97 @@
 <template>
   <div id="structure">
-     <div class="title">{{ title }}</div>
     <div class="web-container" v-if="!chosen">
-      <div class="titles-container">
-        <div 
-          v-for="(tab ,index) in tabs" 
-          :key="index" 
-          class="tab"
-          @click="selectTab(tab, $event)"
+      <img class="logo" src="@/assets/media/logo.png" alt="לוגו">
+      <div class="title">{{ title }}</div>
+      <div class="divider"></div>
+      <div class="grid">
+        <button
+          v-for="(tab, index) in tabs"
+          :key="index"
+          class="tab-btn"
+          :class="{ 'shine-animate': shiningIndex === index }"
+          @click="selectTab(tab, index)"
         >
-          {{ tab }}
-        </div>
+          <span class="tab-text">{{ tab.title }}</span>
+        </button>
       </div>
     </div>
 
     <practice
-      v-if="chosen"
+      v-if="chosen && selectedTab && selectedTab.key !== 'nohal-alat'"
       @back="back"
       :tab="selectedTab">
     </practice>
+
+    <nohal-alat
+      v-if="chosen && selectedTab && selectedTab.key === 'nohal-alat'"
+      @back="back"
+      :tab="selectedTab">
+    </nohal-alat>
+    <nohal-atzmai
+      v-if="chosen && selectedTab && selectedTab.key === 'nohal-atzmai'"
+      @back="back"
+      :tab="selectedTab">
+    </nohal-atzmai>
+
+    <equipment
+      v-if="chosen && selectedTab && selectedTab.key === 'equipment'"
+      @back="back"
+      :tab="selectedTab">
+    </equipment>
   </div>
 </template>
 
 <script>
 import json from "../../text.json";
 import Practice from "@/components/Practice.vue";
+import NohalAlat from "@/components/NohalAlat.vue";
+import NohalAtzmai from "@/components/NohalAtzmai.vue";
+import Equipment from "@/components/Equipment.vue";
 
 export default {
   props: ["title"],
   name: "structure",
   components: {
-    Practice
+    Practice,
+    NohalAlat,
+    NohalAtzmai,
+    Equipment
   },
   data() {
     return {
       structure: json.structure,
       tabs: json.structureTabs,
       chosen: false,
-      selectedTab: null
+      selectedTab: null,
+      shiningIndex: null
     };
+  },
+  mounted() {
+    const tp = document.getElementById('text-page');
+    if (tp) tp.scrollTop = 0;
+    window.scrollTo(0, 0);
   },
   methods: {
     back() {
       this.chosen = false;
       this.selectedTab = null;
+      this.shiningIndex = null;
     },
-    selectTab(tab, event) {
-      const el = event.currentTarget;
-      el.classList.add('clicked');
-
+    selectTab(tab, index) {
+      this.shiningIndex = null;
+      this.$nextTick(() => { this.shiningIndex = index; });
       setTimeout(() => {
         this.selectedTab = tab;
         this.chosen = true;
-        el.classList.remove('clicked');
-      }, 150);
+        this.shiningIndex = null;
+      }, 420);
     }
   }
 };
 </script>
 
 <style scoped>
-
 #structure {
   position: absolute;
   width: 100%;
@@ -73,113 +104,120 @@ export default {
   width: 100vw;
   height: 100vh;
   position: absolute;
-  overflow: hidden;
-  margin: 0;
   top: 0;
   right: 0;
-}
-.title {
-    font-family: "assistant-extraBold";
-margin: auto;
-width: 80vw;
-margin-top: 5vh;
-font-size: 2.5vw;
-letter-spacing: 0.04em;
-text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-/* ===== LAYOUT ===== */
-.titles-container {
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 3vw;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  background: #f5f5f7;
+  gap: 4vh;
+  overflow: hidden;
 }
 
-/* ===== TAB (copied from .title) ===== */
-.tab {
-  padding: 1vh 1.5vw;
-  border: 0.15vh solid rgba(96,165,250,0.45);
-  border-radius: 1.5vh;
-  color: #E6EDF3;
-  width: 12vw;
-  cursor: pointer;
-  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-  position: relative;
-  font-size: 2.25vw;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transition: transform 120ms ease, box-shadow 200ms ease;
-  overflow: hidden;
-  font-family: "assistant";
-  text-align: center;
-  backdrop-filter: blur(10px);
+.logo {
+  height: 8vh;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+}
 
-  /* mobile fixes */
+.title {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+.divider {
+  width: 3vw;
+  height: 1.5px;
+  background: #d2d2d7;
+  margin-top: -2.5vh;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 1.2vw;
+  width: 80vw;
+}
+
+.tab-btn {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #d0e4d8;
+  border-radius: 10px;
+  padding: 3.5vh 2vw;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* press effect */
-.tab:active {
-  transform: scale(0.95);
+.tab-btn:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.09);
+  border-color: #3a6b4a;
 }
 
-/* background fill animation */
-.tab::before {
-  content: "";
+.tab-text {
+  font-family: "assistant-bold";
+  font-size: 1.3vw;
+  color: #1d1d1f;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* SHINE EFFECT */
+.tab-btn::after {
+  content: '';
   position: absolute;
   top: 0;
-  right: 0;
+  left: -80%;
+  width: 55%;
   height: 100%;
-  width: 0;
-  border-radius: 1.2vh;
-  background: linear-gradient(135deg, #60A5FA, #3B82F6);
-  z-index: -1;
-  transition: all 150ms;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.55) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
 }
 
-.tab.clicked::before {
-  width: 100%;
+.tab-btn.shine-animate::after {
+  animation: btnShine 0.4s ease-in-out forwards;
+  opacity: 1;
 }
 
-/* hover */
-.tab:hover {
-  color: #0a0f1e;
-  border-color: transparent;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.3), 0 0 18px rgba(96,165,250,0.3);
+@keyframes btnShine {
+  from { left: -80%; }
+  to   { left: 120%; }
 }
 
-.tab:hover::before {
-  width: 100%;
+/* LARGE SCREEN */
+@media (min-width: 1600px) {
+  .title    { font-size: 3.8vw; }
+  .tab-text { font-size: 1.8vw; }
 }
 
-/* ===== MOBILE ===== */
+/* MOBILE */
 @media (max-device-width: 600px) {
-  .titles-container {
+  .logo     { height: 4vh; }
+  .title    { font-size: 6.5vw; }
+  .divider  { width: 15vw; }
+  .grid {
     flex-direction: column;
-    gap: 2vh;
+    gap: 2.5vw;
+    width: 88vw;
   }
-  .title {
-  margin-top: 7vh;
-  font-size: 6vw;
-}
-
-  .tab {
-    font-size: 4vw;
-    border-radius: 0.8vh;
-    padding: 1.2vh 2vw;
-    width: 60vw;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  }
-
-  .tab:hover {
-    box-shadow: 0 4px 15px rgba(117,194,230,0.25);
-  }
+  .tab-btn  { flex: none; width: 100%; padding: 2.5vh 4vw; border-radius: 20px; }
+  .tab-text { font-size: 4.2vw; }
 }
 </style>

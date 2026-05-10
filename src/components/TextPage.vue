@@ -8,7 +8,7 @@
       <logistics :title="title" v-if="Number(tabNum) === 3"></logistics>
       <structure :title="title" v-if="Number(tabNum) === 4"></structure>
       <darcash :title="title" v-if="Number(tabNum) === 5"></darcash>
-
+      <routine :title="title" v-if="Number(tabNum) === 6"></routine>
 
       <!-- <div id="text-border">
         <fire-areas v-if="Number(tabNum) === 0"></fire-areas>
@@ -24,6 +24,7 @@ import ShootingRange from "@/components/ShootingRange";
 import Logistics from "@/components/Logistics";
 import Darcash from "@/components/Darcash";
 import Structure from "@/components/Structure";
+import Routine from "@/components/Routine";
 
 export default {
   name: "text-page",
@@ -34,15 +35,30 @@ export default {
     ShootingRange,
     Logistics,
     Darcash,
-    Structure
+    Structure,
+    Routine
   },
   data() {
     return {
       title: json["topics"][Number(this.tabNum)]
     }
   },
+  mounted() {
+    this.$el.querySelector('#back').blur();
+    this.$el.scrollTop = 0;
+    window.scrollTo(0, 0);
+  },
+  watch: {
+    tabNum() {
+      this.$nextTick(() => {
+        this.$el.scrollTop = 0;
+        window.scrollTo(0, 0);
+      });
+    }
+  },
   methods: {
-    back() {
+    back(event) {
+      event.currentTarget.blur();
       this.$emit("back");
     }
   }
@@ -73,6 +89,8 @@ export default {
   padding: 0.7vh 1.5vw;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 #back:hover {
   background: #3a6b4a;
@@ -101,7 +119,14 @@ export default {
   font-size: 3vw;
   padding: 0.6vh 3vw;
   right: 2vw;
-  top: 1.5vh;
+  top: 2.5vh;
+  background: #3a6b4a;
+  color: #ffffff;
+  transition: none;
+}
+#back:hover, #back:active {
+  background: #3a6b4a;
+  color: #ffffff;
 }
  
 .title {

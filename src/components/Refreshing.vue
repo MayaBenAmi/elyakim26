@@ -1,29 +1,28 @@
 <template>
   <div id="refreshing">
-    <div class="web-container">
-      
-      <div v-if="chosenTitle === ''">
+    <div class="web-container" v-if="chosenTitle === ''">
+      <img class="logo" src="@/assets/media/logo.png" alt="לוגו">
       <div class="maintitle">{{ maintitle }}</div>
-      <img class="wave" id="wave0" src="@/assets/media/wave0.svg" alt="">
-      <img class="wave" id="wave1" src="@/assets/media/wave1.svg" alt="">
-
-      <div class="titles-container" v-if="!chosen">
-        <div class="row" v-for="(rowTitles, rowIndex) in titleRows" :key="rowIndex">
-          <div
-            v-for="(title, index) in rowTitles"
-            :key="index"
-            class="title"
-            @click="pickArea(rowIndex * rowLength + index, $event)"
-          >
-            {{ title }}
-          </div>
-        </div>
+      <div class="divider"></div>
+      <div class="grid">
+        <button
+          v-for="(title, index) in titles"
+          :key="index"
+          class="area-btn"
+          :class="{ 'shine-animate': shiningIndex === index }"
+          @click="pickArea(index)"
+        >
+          <span class="area-text">{{ title }}</span>
+        </button>
       </div>
     </div>
-    </div>
 
-
-    <refreshment v-if="chosenTitle !== ''" :num="chosenTitle" :maintitle="maintitle" @back="back"></refreshment>
+    <refreshment
+      v-if="chosenTitle !== ''"
+      :num="chosenTitle"
+      :maintitle="maintitle"
+      @back="back"
+    ></refreshment>
   </div>
 </template>
 
@@ -35,64 +34,31 @@ export default {
   props: ["maintitle"],
   name: "refreshing",
   components: { Refreshment },
-
   data() {
     return {
       titles: json.refreshing.map(item => item.title),
-      chosen: false,
       chosenTitle: "",
-      isMobile: false
+      shiningIndex: null
     };
   },
-
-  computed: {
-    // 2 columns on mobile (your current behavior), 3 columns on desktop
-    rowLength() {
-      return this.isMobile
-        ? Math.ceil(this.titles.length / 2)
-        : 3;
-    },
-
-    titleRows() {
-      const rows = [];
-
-      for (let i = 0; i < this.titles.length; i += this.rowLength) {
-        rows.push(this.titles.slice(i, i + this.rowLength));
-      }
-
-      return rows;
-    }
+  mounted() {
+    const tp = document.getElementById('text-page');
+    if (tp) tp.scrollTop = 0;
+    window.scrollTo(0, 0);
   },
-
   methods: {
-    pickArea(index, event) {
-      const el = event.currentTarget;
-      el.classList.add("clicked");
-
+    pickArea(index) {
+      this.shiningIndex = null;
+      this.$nextTick(() => { this.shiningIndex = index; });
       setTimeout(() => {
         this.chosenTitle = index;
-        this.chosen = true;
-        el.classList.remove("clicked");
-      }, 150);
+        this.shiningIndex = null;
+      }, 420);
     },
-
     back() {
-      this.chosen = false;
       this.chosenTitle = "";
-    },
-
-    checkScreen() {
-      this.isMobile = window.matchMedia("(max-width: 600px)").matches;
+      this.shiningIndex = null;
     }
-  },
-
-  mounted() {
-    this.checkScreen();
-    window.addEventListener("resize", this.checkScreen);
-  },
-
-  beforeDestroy() {
-    window.removeEventListener("resize", this.checkScreen);
   }
 };
 </script>
@@ -101,173 +67,136 @@ export default {
 #refreshing {
   position: absolute;
   width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   height: 100%;
   top: 0;
   right: 0;
 }
+
 .web-container {
   width: 100vw;
   height: 100vh;
-  margin: 0%;
-  padding: 0%;
   position: absolute;
-  top: 0px;
-  right: 0px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-.maintitle {
-    font-family: "assistant-extraBold";
-    margin: auto;
-    width: 80vw;
-    margin-top: 5vh;
-    font-size: 2.5vw;
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-
-
-
-/* ===== LAYOUT ===== */
-.titles-container {
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
+  top: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 80%;
-}
-
-/* ===== TITLE ===== */
-.title {
-  padding: 0.75vw;
-  border: 0.15vh solid rgba(96,165,250,0.5);
-  border-radius: 1.5vw;
-  color: #E6EDF3;
-  width: 15vw;
-  cursor: pointer;
-  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
-  backdrop-filter: blur(10px);
-  position: relative;
-  font-size: 2.25vw;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  transition: transform 120ms ease, box-shadow 200ms ease;
+  background: #f5f5f7;
+  gap: 3.5vh;
   overflow: hidden;
-  font-family: "assistant";
-  margin-bottom: 2vh;
-  margin-top: 2vh;
+}
 
-  /* mobile fixes */
+.logo {
+  height: 7vh;
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+}
+
+.maintitle {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
+  margin-top: -2vh;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2vw;
+  width: 55vw;
+}
+
+.area-btn {
+  flex: 0 0 calc(33.333% - 0.8vw);
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #d0e4d8;
+  border-radius: 10px;
+  padding: 2.8vh 2vw;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* press effect */
-.title:active {
-  transform: scale(0.92);
+.area-btn:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.09);
+  border-color: #3a6b4a;
 }
 
-/* background fill animation */
-.title::before {
-  content: "";
+.area-text {
+  font-family: "assistant-bold";
+  font-size: 1.3vw;
+  color: #1d1d1f;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* SHINE EFFECT */
+.area-btn::after {
+  content: '';
   position: absolute;
   top: 0;
-  right: 0;
+  left: -80%;
+  width: 55%;
   height: 100%;
-  width: 0;
-  border-radius: 1vw;
-  background: linear-gradient(135deg, #60A5FA, #3B82F6);
-  z-index: -1;
-  transition: all 150ms;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
 }
 
-.title.clicked::before {
-  width: 100%;
+.area-btn.shine-animate::after {
+  animation: btnShine 0.4s ease-in-out forwards;
+  opacity: 1;
 }
 
-/* desktop hover */
-.title:hover {
-  color: #0a0f1e;
-  border-color: transparent;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 20px rgba(96,165,250,0.25);
+@keyframes btnShine {
+  from { left: -80%; }
+  to   { left: 120%; }
 }
 
-.title:hover::before {
-  width: 100%;
+/* LARGE SCREEN */
+@media (min-width: 1600px) {
+  .maintitle  { font-size: 3.8vw; }
+  .area-text  { font-size: 1.8vw; }
 }
 
-/* ===== WAVES ===== */
-.wave {
-  width: 100vw;
-  max-height: 100%;
-  position: absolute;
-  right: 0;
-  user-select: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-#wave0 {
-  top: -20vh;
-}
-
-#wave1 {
-  top: 30vh;
-}
-
-/* ===== MOBILE ===== */
+/* MOBILE */
 @media (max-device-width: 600px) {
-  .wave {
-    width: 500vw;
-    right: 0;
+  .web-container {
+    justify-content: flex-start;
+    padding-top: 10vh;
+    overflow-y: auto;
   }
-
-  #wave0 {
-    top: -50vh;
-    right: -40vw;
-  }
-
-  #wave1 {
-    top: 10vh;
-  }
-  .maintitle {
-    margin-top: 7vh;
-    font-size: 6vw;
-  }
-
-  .titles-container {
-    top: 50%;
-    right: 50%;
-    transform: translate(50%, -50%);
-    height: 60%;
-    justify-content: space-around;
-  }
-
-  .row {
+  .logo       { height: 4vh; }
+  .maintitle  { font-size: 6.5vw; }
+  .divider    { width: 15vw; }
+  .grid {
     flex-direction: column;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+    gap: 2.5vw;
+    width: 88vw;
+    margin-bottom: 20vh;
   }
-
-  .title {
-    font-size: 5vw;
-    border-radius: 1vh;
-    padding: 1vh;
-    width: 50vw;
-    margin: 2%;
-  }
+  .area-btn   { flex: none; width: 100%; padding: 2.5vh 4vw; border-radius: 20px; }
+  .area-text  { font-size: 4.2vw; }
 }
 </style>

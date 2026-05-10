@@ -1,14 +1,11 @@
 <template>
   <div id="shooting-range">
-    <div class="title">{{ title }}</div>
-    <div id="text-border">
-        <div
-        v-for="(item, index) in shootingRange"
-        :key="index"
-        class="txt"
-        >
+    <div class="subTitle">{{ title }}</div>
+    <div class="divider"></div>
+    <div class="txt">
+      <div v-for="(item, index) in shootingRange" :key="index" class="txt-line">
         {{ item }}
-        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,74 +20,79 @@ export default {
     return {
       shootingRange: json["shooting-range"]
     };
+  },
+  mounted() {
+    const tp = document.getElementById('text-page');
+    if (tp) tp.scrollTop = 0;
+    window.scrollTo(0, 0);
   }
 };
 </script>
 
-
 <style scoped>
 #shooting-range {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  top: 0;
-  right: 0;
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10vh 0 6vh;
 }
-.title {
-    font-family: "assistant-extraBold";
-    margin: auto;
-    width: 80vw;
-    margin-top: 5vh;
-    font-size: 2.5vw;
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+
+.subTitle {
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin-bottom: 1vh;
 }
-#text-border {
-  width: max-content;
-  padding: 2% 6%;
-  padding-top: 2%;
-  margin: auto;
-  margin-top: 3vh;
-  border-radius: 2.25vh;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
-  border: 0.15vh solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  font-size: 2vw;
-  text-align: start;
+
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
+  margin-bottom: 3vh;
 }
+
 .txt {
-    margin-bottom: 1.2vh;
-    padding-right: 1.5vw;
-    position: relative;
-    padding-left: 1.5vw;
-    color: rgba(255,255,255,0.9);
-    transition: all 0.2s ease;
+  width: 55vw;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e5ea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.08);
+  padding: 3vh 2.5vw;
+  font-family: "assistant";
+  font-size: 1.1vw;
+  color: #3a3a3c;
+  line-height: 1.8;
+  direction: rtl;
+  text-align: right;
+  box-sizing: border-box;
 }
-.txt::before {
-    content: "●";
-    position: absolute;
-    right: 0;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.8em;
+
+.txt-line {
+  margin-bottom: 1vh;
+  padding-right: 1.2vw;
+  position: relative;
 }
-@media (max-device-width: 600px)  {
-  #text-border {
-    border-radius: 1.25vh;
-    border: 0.15vh solid rgba(255,255,255,0.2);
-    font-size: 4.25vw;
-    padding: 6% 10%;
-    padding-top: 2%;
-  }
-  .title {
-    margin-top: 7vh;
-    font-size: 6vw;
-  }
-  .txt {
-    margin-bottom: 1vh;
-    padding-right: 2vw;
-    padding-left: 2vw;
-    font-size: 2.2vw;
-  }
+.txt-line::before {
+  content: "●";
+  position: absolute;
+  right: 0;
+  color: #3a6b4a;
+  font-size: 0.6em;
+  top: 0.35em;
+}
+
+@media (max-device-width: 600px) {
+  #shooting-range { padding-top: 6vh; }
+  .subTitle  { font-size: 5.5vw; }
+  .divider   { width: 12vw; }
+  .txt       { width: 88vw; font-size: 3.2vw; padding: 2.5vh 4vw; border-radius: 12px; line-height: 1.6; }
+  .txt-line  { padding-right: 3vw; }
 }
 </style>

@@ -48,6 +48,11 @@ export default {
       shiningIndex: null
     }
   },
+  mounted() {
+    const tp = document.getElementById('text-page');
+    if (tp) tp.scrollTop = 0;
+    window.scrollTo(0, 0);
+  },
   methods: {
     pickArea(name, index) {
       this.shiningIndex = null;
@@ -62,6 +67,7 @@ export default {
       this.chosen = false;
       this.chosenNum = "";
       this.table = false;
+      this.shiningIndex = null;
     },
     showTable () {
       this.table = true;
@@ -131,7 +137,7 @@ export default {
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #d0e4d8;
-  border-radius: 16px;
+  border-radius: 10px;
   padding: 3.5vh 2vw;
   cursor: pointer;
   transition: box-shadow 0.2s, border-color 0.2s;
@@ -236,7 +242,8 @@ export default {
   .number       { flex: none; width: 100%; padding: 2.5vh 4vw; border-radius: 20px; }
   .number-text  { font-size: 4.2vw; }
 
-  .table-btn    { font-size: 4.5vw; padding: 1.2vh 10vw; }
+  .table-btn    { font-size: 4vw; padding: 1.2vh 7vw; background: #3a6b4a; color: #ffffff; transition: none; }
+  .table-btn:hover, .table-btn:active { background: #3a6b4a; color: #ffffff; }
   .arrow        { font-size: 4vw; }
 }
 </style>
