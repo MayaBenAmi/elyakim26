@@ -1,17 +1,13 @@
 <template>
   <div id="refreshment">
     <button id="back" @click="back">→ חזרה</button>
-    <div class="maintitle">{{ maintitle }}</div>
     <div class="subTitle">{{ title }}</div>
+    <div class="divider"></div>
 
-    <!-- Render txt only if isTable is false -->
     <div v-if="!isTable" class="txt">
-      <div v-for="(line, index) in txt" :key="index" class="txt-line">
-       {{ line }}
-      </div>
+      <div v-for="(line, index) in txt" :key="index" class="txt-line" v-html="linkifyPhones(line)"></div>
     </div>
 
-    <!-- Render table only if isTable is true -->
     <div v-else class="table-container">
       <table>
         <thead>
@@ -37,10 +33,19 @@ import json from "../../text.json";
 export default {
   name: "refreshment",
   props: ["num", "maintitle"],
+  mounted() {
+    this.$el.scrollTop = 0;
+    const tp = document.getElementById('text-page');
+    if (tp) tp.scrollTop = 0;
+    window.scrollTo(0, 0);
+  },
   methods: {
     back() {
       this.$emit("back");
     },
+    linkifyPhones(text) {
+      return text.replace(/(0\d{2}-\d{7})/g, '<a href="tel:$1" class="phone-link">$1</a>');
+    }
   },
   computed: {
     dataItem() {
@@ -60,37 +65,30 @@ export default {
     },
     maxRows() {
       if (!this.isTable) return 0;
-      return Math.max(...this.tableArray.map((col) => col.cells.length));
+      return Math.max(...this.tableArray.map(col => col.cells.length));
     },
     maxRowsArray() {
       return Array.from({ length: this.maxRows }, (_, i) => i);
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
 #refreshment {
   position: relative;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 100%;
-  top: 0;
-  right: 0;
-}
-.maintitle {
-    font-family: "assistant-extraBold";
-    margin: auto;
-    width: 80vw;
-    margin-top: 5vh;
-    font-size: 2.5vw;
-    letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+width: 100vw;
+min-height: 100vh;
+background: #f5f5f7;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+padding: 10vh 0 4vh;
 }
 
 #back {
-  position: fixed;
+  position: absolute;
   right: 1.5vw;
   top: 2.5vh;
   z-index: 7;
@@ -108,148 +106,130 @@ export default {
   background: #3a6b4a;
   color: #ffffff;
 }
-
 .subTitle {
-  font-family: "assistant-extraBold";
-  margin: auto;
-  width: 80vw;
-  margin-top: 1vh;
-  font-size: 1.75vw;
-  text-shadow: 1px 0px 1.5px #000000;
+  font-family: "assistant-extrabold";
+  font-size: 2.25vw;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin-bottom: 1vh;
 }
 
-.txt {
-  margin: auto;
-  width: fit-content;
-  max-width: 85vw;
-  font-size: 1.25vw;
-  border-radius: 1.5vw;
-  margin-top: 1.5vh;
+.divider {
+  width: 3vw;
+  height: 2px;
+  background: #d2d2d7;
+  border-radius: 2px;
   margin-bottom: 3vh;
-  text-align: start;
-  padding: 2vw;
-  padding-bottom: 2vh;
-  padding-top: 5vh;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-  border: 0.2vh solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  box-sizing: border-box;
-  overflow: hidden;
-  color: rgba(255,255,255,0.95);
+}
+
+/* TEXT CARD */
+.txt {
+  width: 80vw;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e5ea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.08);
+  padding: 3vh 2.5vw;
   font-family: "assistant";
-  /* line-height: 1.6; */
+  font-size: 1.1vw;
+  color: #3a3a3c;
+  line-height: 1.8;
+  direction: rtl;
+  text-align: right;
+  box-sizing: border-box;
 }
 
 .txt-line {
-  margin-bottom: 1.2vh;
-  padding-right: 1.5vw;
-  position: relative;
-  padding-left: 1.5vw;
+  margin-bottom: 1vh;
 }
 
+.phone-link {
+  color: #3a6b4a;
+  text-decoration: underline;
+  font-family: inherit;
+}
+
+/* TABLE */
 .table-container {
-  margin-top: 2vh;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-bottom: 5vh;
 }
 
 table {
   border-collapse: collapse;
-  width: 60%;
+  width: 60vw;
   table-layout: fixed;
-  margin-bottom: 5vh;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
-  border: 0.15vh solid rgba(255,255,255,0.2);
-  border-radius: 1vh;
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.12);
+  border: 1px solid #e5e5ea;
 }
 
 th {
-  background: linear-gradient(135deg, rgba(96,165,250,0.3) 0%, rgba(59,130,246,0.2) 100%);
-  border: 0.15vh solid rgba(96,165,250,0.4);
-  padding: 1.5vh 1%;
-  font-weight: bold;
-  color: rgba(255,255,255,0.95);
-  font-family: "assistant-extraBold";
+  background: #f5f5f7;
+  border-bottom: 1px solid #f5f5f7;
+  border-left: 2px solid #f5f5f7;
+  padding: 1.5vh 2%;
+  font-family: "assistant-extrabold";
   font-size: 1vw;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  color: #1d1d1f;
+  text-align: center;
+}
+th:last-child {
+  border-left: none;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(255,255,255,0.03);
+tr:nth-child(even) td {
+  background-color: #f5f5f7;
 }
 
-tr:hover {
-  background-color: rgba(96,165,250,0.1);
-  transition: background-color 0.2s ease;
+tr:hover td {
+  background-color: #f0f7f3;
 }
 
 td {
   direction: rtl;
-  text-align: right;
-  border: 0.15vh solid rgba(255,255,255,0.15);
-  padding: 1.2vh 1%;
+  text-align: center;
+  border-bottom: 1px solid #f5f5f7;
+  border-left: 2px solid #f5f5f7;
+  padding: 1.2vh 2%;
   white-space: pre-line;
-  color: rgba(255,255,255,0.9);
-  transition: all 0.2s ease;
-  font-size: 1.1vw;
+  color: #3a3a3c;
+  font-family: "assistant";
+  font-size: 1vw;
+  transition: background-color 0.2s ease;
+}
+td:last-child {
+  border-left: none;
 }
 
+/* MOBILE */
 @media (max-device-width: 600px) {
+  #refreshment  { padding-top: 6vh; }
   #back {
-    font-size: 3vw;
-    padding: 0.6vh 3vw;
-  }
-  .maintitle {
-  margin-top: 7vh;
-  font-size: 6vw;
+  font-size: 3vw;
+  padding: 0.6vh 3vw;
+  right: 2vw;
+  top: 2.5vh;
+  background: #3a6b4a;
+  color: #ffffff;
+  transition: none;
 }
-  .subTitle {
-    font-size: 4.75vw;
-    margin-top: 0.5vh;
-  }
-  .txt {
-    border-radius: 2.25vh;
-    border: 0.2vh solid rgba(255,255,255,0.3);
-    font-size: 4.5vw;
-    margin-top: 0.75vh;
-    max-width: 80vw;
-    padding: 3vw;
-    padding-top: 3vh;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    line-height: 1.5;
-  }
-  .txt-line {
-    margin-bottom: 1vh;
-    padding-right: 2vw;
-    padding-left: 2vw;
-  }
-  .table-container {
-    margin-top: 0.75vh;
-  }
-
-  table {
-    width: 70vw;
-    border-radius: 0.5vh;
-    box-sizing: border-box;
-  }
-
-  th {
-    border: 0.15vh solid rgba(150,180,255,0.4);
-    font-size: 2.5vw;
-    padding: 1vh 0.5%;
-  }
-
-  td {
-    border: 0.15vh solid rgba(255,255,255,0.15);
-    font-size: 2.2vw;
-    padding: 0.8vh 0.5%;
-  }
+#back:hover, #back:active {
+  background: #3a6b4a;
+  color: #ffffff;
+}
+  
+  .subTitle     { font-size: 5.5vw; }
+  .divider      { width: 12vw; }
+  .txt          { width: 88vw; font-size: 3.5vw; padding: 2.5vh 4vw; border-radius: 12px; line-height: 1.6; }
+  table         { width: 88vw; border-radius: 12px; }
+  th            { font-size: 3.5vw; padding: 1.2vh 1.5%; font-family: "assistant-bold"; }
+  td            { font-size: 3.5vw; padding: 1vh 1.5%; }
+  tr:hover td   { background-color: inherit; }
+  tr:nth-child(even):hover td { background-color: #f5f5f7; }
 }
 </style>
