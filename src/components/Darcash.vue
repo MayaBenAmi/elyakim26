@@ -203,32 +203,67 @@
     <transition name="modal-fade">
       <div v-if="showLoginModal" class="modal-overlay" @click.self="closeLoginModal">
         <div class="password-modal">
-          <div class="modal-title">כניסת מנהל</div>
-          <input
-            ref="loginEmailInput"
-            v-model="loginEmail"
-            type="email"
-            class="modal-pw-input"
-            placeholder="אימייל"
-            autocomplete="email"
-            @keyup.enter="$refs.loginPasswordInput.focus()"
-          />
-          <input
-            ref="loginPasswordInput"
-            v-model="loginPassword"
-            type="password"
-            class="modal-pw-input"
-            placeholder="סיסמה"
-            autocomplete="current-password"
-            @keyup.enter="submitLogin"
-          />
-          <div v-if="loginError" class="modal-error">{{ loginError }}</div>
-          <div class="modal-btns">
-            <button class="modal-btn-cancel" @click="closeLoginModal">ביטול</button>
-            <button class="modal-btn-ok" @click="submitLogin" :disabled="loginLoading">
-              {{ loginLoading ? '...' : 'כניסה' }}
-            </button>
-          </div>
+
+          <!-- Login view -->
+          <template v-if="!forgotPasswordMode">
+            <div class="modal-title">כניסת מנהל</div>
+            <input
+              ref="loginEmailInput"
+              v-model="loginEmail"
+              type="email"
+              class="modal-pw-input"
+              placeholder="אימייל"
+              autocomplete="email"
+              @keyup.enter="$refs.loginPasswordInput.focus()"
+            />
+            <input
+              ref="loginPasswordInput"
+              v-model="loginPassword"
+              type="password"
+              class="modal-pw-input"
+              placeholder="סיסמה"
+              autocomplete="current-password"
+              @keyup.enter="submitLogin"
+            />
+            <div v-if="loginError" class="modal-error">{{ loginError }}</div>
+            <button class="forgot-password-link" @click="openForgotPassword">שכחתי סיסמה</button>
+            <div class="modal-btns">
+              <button class="modal-btn-cancel" @click="closeLoginModal">ביטול</button>
+              <button class="modal-btn-ok" @click="submitLogin" :disabled="loginLoading">
+                {{ loginLoading ? '...' : 'כניסה' }}
+              </button>
+            </div>
+          </template>
+
+          <!-- Forgot password view -->
+          <template v-else>
+            <div class="modal-title">איפוס סיסמה</div>
+            <template v-if="!forgotPasswordSent">
+              <div class="modal-subtitle">נשלח אליך מייל עם קישור לאיפוס הסיסמה</div>
+              <input
+                ref="forgotEmailInput"
+                v-model="forgotPasswordEmail"
+                type="email"
+                class="modal-pw-input"
+                placeholder="אימייל"
+                autocomplete="email"
+                @keyup.enter="submitForgotPassword"
+              />
+              <div v-if="forgotPasswordError" class="modal-error">{{ forgotPasswordError }}</div>
+              <div class="modal-btns">
+                <button class="modal-btn-cancel" @click="forgotPasswordMode = false">חזור</button>
+                <button class="modal-btn-ok" @click="submitForgotPassword" :disabled="forgotPasswordLoading">
+                  {{ forgotPasswordLoading ? '...' : 'שלח' }}
+                </button>
+              </div>
+            </template>
+            <template v-else>
+              <div class="modal-success">המייל נשלח! בדוק את תיבת הדואר שלך ולחץ על הקישור לאיפוס הסיסמה.</div>
+              <div class="modal-btns">
+                <button class="modal-btn-ok" @click="closeLoginModal">סגור</button>
+              </div>
+            </template>
+          </template>
         </div>
       </div>
     </transition>
@@ -324,6 +359,12 @@ export default {
       loginPassword: "",
       loginError: "",
       loginLoading: false,
+      // Forgot password
+      forgotPasswordMode: false,
+      forgotPasswordEmail: "",
+      forgotPasswordError: "",
+      forgotPasswordSent: false,
+      forgotPasswordLoading: false,
       // Set password modal (invite / recovery)
       showSetPasswordModal: false,
       newPassword: "",
@@ -461,6 +502,37 @@ export default {
       this.loginEmail = "";
       this.loginPassword = "";
       this.loginError = "";
+      this.forgotPasswordMode = false;
+      this.forgotPasswordEmail = "";
+      this.forgotPasswordError = "";
+      this.forgotPasswordSent = false;
+    },
+    openForgotPassword() {
+      this.forgotPasswordMode = true;
+      this.forgotPasswordEmail = this.loginEmail;
+      this.forgotPasswordError = "";
+      this.forgotPasswordSent = false;
+      this.$nextTick(() => {
+        if (this.$refs.forgotEmailInput) this.$refs.forgotEmailInput.focus();
+      });
+    },
+    async submitForgotPassword() {
+      this.forgotPasswordError = "";
+      if (!this.forgotPasswordEmail.trim()) {
+        this.forgotPasswordError = "יש להזין כתובת אימייל";
+        return;
+      }
+      this.forgotPasswordLoading = true;
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        this.forgotPasswordEmail,
+        { redirectTo: window.location.href }
+      );
+      this.forgotPasswordLoading = false;
+      if (error) {
+        this.forgotPasswordError = "שגיאה בשליחת המייל, נסה שוב";
+      } else {
+        this.forgotPasswordSent = true;
+      }
     },
     async submitLogin() {
       this.loginError = "";
@@ -934,6 +1006,39 @@ td:last-child { border-left: none; }
 }
 .modal-btn-ok:hover { background: #2d5239; }
 .modal-btn-ok:disabled { opacity: 0.6; cursor: default; }
+
+.modal-subtitle {
+  font-family: "assistant";
+  font-size: 0.85vw;
+  color: #636366;
+  margin-bottom: 0.3vh;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: "assistant";
+  font-size: 0.85vw;
+  color: #3a6b4a;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: right;
+  direction: rtl;
+}
+.forgot-password-link:hover { color: #2d5239; }
+
+.modal-success {
+  font-family: "assistant";
+  font-size: 0.9vw;
+  color: #2d7a47;
+  background: #e8f5ec;
+  border-radius: 8px;
+  padding: 1.2vh 1vw;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.6;
+}
 
 /* Modal transition */
 .modal-fade-enter-active, .modal-fade-leave-active { transition: opacity 0.2s ease; }
